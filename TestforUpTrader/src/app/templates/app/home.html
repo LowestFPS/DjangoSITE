@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% load tree_menu %}
-
-{% block content %}
-    {{ block.super }}
-    <nav>{% draw_menu "main_menu" %}</nav>
-    <h2>{{ name }}</h2>
-{% endblock %}
-

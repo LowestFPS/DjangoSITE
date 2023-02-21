@@ -1,0 +1,26 @@
+{% load crispy_forms_tags %}
+<div class="card my-4">
+    <h5 class="card-header">Прокомментируй:</h5>
+    {% if user.is_authenticated %}
+        <div class="card-body">
+            {% crispy form %}
+        </div>
+    {% else %}
+        <h6 class="card-header">
+            <a href="{% url 'signin' %}">Авторизуйтесь</a> или <a href="{% url 'signup' %}">Зарегистрируйтесь</a>
+            чтобы оставить комментарий
+        </h6>
+    {% endif %}
+</div>
+{% for comment in post.comments.all %}
+    <div class="media mb-4" id="foot_anchor">
+        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+        <div class="media-body text-break">
+            <span class="d-flex justify-content-between mb-2">
+                <p class="pl-5 pr-5 mt-0 h4 text-light bg-dark rounded">{{ comment.username }}</p>
+                <p class="pt-2 pr-2 text-center mt-0 h6">{{ comment.created_date }}</p>
+            </span>
+            <div>{{ comment.text }}</div>
+        </div>
+    </div>
+{% endfor %}

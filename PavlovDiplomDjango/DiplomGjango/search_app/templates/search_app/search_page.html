@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Поиск
+{% endblock %}
+{% block content_app %}
+    <div class="container-fluid home-slider">
+        <div class="carousel-inner">
+            <div class="carousel-item active bg-secondary">
+                <div class="carousel-caption d-none d-md-block d-flex flex-column">
+                    <div>
+                        <h2 class="text-white text-center mt-5 mb-3 bg-secondary">
+                            Найдете интересующую вас статью по ключевому слову
+                        </h2>
+                    </div>
+                    {% crispy form %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <nav aria-label="breadcrumb" class="mt-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Поиск</li>
+                    </ol>
+                </nav>
+
+                <p class="lead">Найдено записей: {{ count }}</p>
+                {% for post in result %}
+                    <h4><a href="{% url "blog_post" post.url %}">{{ post.title }}</a></h4>
+                    <br>
+                    <p>{{ post.description|safe|truncatechars:250 }}</p>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Paginate me">
+        <ul class="pagination justify-content-center">
+            {% if result.has_previous %}
+                <a class="page-link" href="?page={{ result.previous_page_number }}&query={{ query }}" tabindex="-1">Предыдущая</a>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Предыдущая</a>
+                </li>
+            {% endif %}
+            {% for page_number in result.paginator.page_range %}
+                {% if page_number == result.number %}
+                    <li class="page-item active"><a class="page-link"
+                                                    href="?page={{ page_number }}&query={{ query }}">{{ page_number }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_number }}&query={{ query }}">{{ page_number }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if result.has_next %}
+                <a class="page-link" href="?page={{ result.next_page_number }}&query={{ query }}">Следующая</a>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Следующая</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endblock %}

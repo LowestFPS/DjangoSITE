@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Создать пост
+{% endblock %}
+{% block content_app %}
+    <div class="container">
+        <h1 class="text-center text-primary my-4">
+            Создайте свой пост
+        </h1>
+        {% if user.is_authenticated %}
+            <div class="card-body">
+                {% if error %}
+                    <h4 class="text-center text-danger">{{ error }}</h4>
+                {% endif %}
+                {% crispy form %}
+            </div>
+        {% else %}
+            <h6 class="card-header text-center">
+                <a href="{% url 'signin' %}">Авторизуйтесь</a> или <a href="{% url 'signup' %}">Зарегистрируйтесь</a>
+                чтобы добавить свой пост
+            </h6>
+        {% endif %}
+    </div>
+{% endblock %}

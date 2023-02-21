@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block content_app %}
+    <div class="container">
+        <h1 class="text-center text-light bg-dark py-4 my-4 mb-5 rounded-bottom">{{ title }}</h1>
+        <p class="my-3">Другие теги:
+            {% for mt in common_tags %}
+                <a href="../{{ mt|lower }}" class="badge badge-success">#{{ mt|lower }}</a>
+            {% endfor %}
+        </p>
+        <div class="row">
+            {% for post in posts %}
+                <div class="mt-4 col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src='{% static "/blog_app/media/" %}{{ post.image }}' alt="" class="card-img-top">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ post.title }}</h4>
+                            {{ post.description|safe|truncatechars:100 }}<br>
+                            {% for tag in post.tag.all %}
+                                <a href="../{{ tag|lower }}" class="mr-1 badge badge-info">#{{ tag|lower }}</a>
+                            {% endfor %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="{% url 'blog_post' post.url %}" class="btn btn-sm btn-outline-secondary">Подробнее</a>
+                                </div>
+                                <small class="text-muted">{{ post.created_data }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Блог
+{% endblock %}
+{% block content_app %}
+<div class="container">
+    <h1 class="my-3 text-center">Последние объявления</h1>
+    <div class="row">
+
+        {% for post in posts_for_page %}
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">{{ post.title }}</h4>
+                    {% for tag in post.tag.all %}
+                    <a href="../search/tag/{{ tag|lower }}" class="mr-1 mb-3 badge badge-info">#{{ tag|lower }}</a>
+                    {% endfor %}
+                    <img src="{% static 'blog_app/media/' %}{{ post.image }}" alt="" class="card-img-top">
+                    <p class="card-text">{{ post.description|safe|truncatechars:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a href="{% url 'blog_post' post.url %}" class="btn px-4 py-2 btn-sm btn-outline-secondary">Подробнее</a>
+                        </div>
+
+                        <small class="text-muted">{{ post.created_data }}</small>
+                        <li class="breadcrumb-item active" aria-current="page">Цена: {{ post.heading }}</li>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+        {% endfor %}
+    </div>
+</div>
+<nav aria-label="Paginate me">
+    <ul class="pagination justify-content-center">
+        {% if posts_for_page.has_previous %}
+        <a class="page-link" href="?page={{ posts_for_page.previous_page_number }}" tabindex="-1">Предыдущая</a>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Предыдущая</a>
+        </li>
+        {% endif %}
+        {% for page_number in posts_for_page.paginator.page_range %}
+        {% if page_number == posts_for_page.number %}
+        <li class="page-item active"><a class="page-link"
+                                        href="?page={{ page_number }}">{{ page_number }}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if posts_for_page.has_next %}
+        <a class="page-link" href="?page={{ posts_for_page.next_page_number }}">Следующая</a>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Следующая</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+<br>
+
+{% endblock %}

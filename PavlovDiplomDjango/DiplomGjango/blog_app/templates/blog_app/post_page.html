@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block content_app %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 text-break">
+                <nav aria-label="breadcrumb" class="mt-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'blog' %}">Объявления</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Цена: {{ post.heading }}</li>
+                    </ol>
+                </nav>
+                <img class="img-fluid rounded" src="{% static 'blog_app/media/' %}{{ post.image }}" alt="">
+                <hr>
+                <p class="lead">{{ post.content|safe }}</p>
+                <hr>
+                <p class="lead text-right">Автор:<a href="#">{{ post.author }}</a></p>
+                <hr>
+                <div class="text-right">Опубликовано {{ post.created_data }}</div>
+                <hr>
+                {% include 'blog_app/post_page_comments.html' %}
+            </div>
+        {% include 'blog_app/post_page_aside.html' %}
+        </div>
+    </div>
+{% endblock %}
